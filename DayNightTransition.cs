@@ -1,30 +1,20 @@
-﻿using System.Collections;
+using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
 public class DayNightTransition : MonoBehaviour
 {
-    Vector3 tempPos;
-    Quaternion tempRotation;
-    // Start is called before the first frame update
-    void Start()
-    {
-        
-    }
+    private Vector3 _tempPos;
+    private Quaternion _tempRotation;
 
-    // Update is called once per frame
-    void Update()
-    {
-
-    }
-
+    // This method is used to swap the directional lights of the moon and sun to simulate a day/night change
     public void triggerChange()
     {
-        tempPos = transform.position;
-        tempRotation = transform.rotation;
-        tempPos.y = -tempPos.y;
-        tempRotation.x = -tempRotation.x;
-        transform.position = tempPos;
-        transform.rotation = tempRotation;
+        _tempPos = transform.position;
+        _tempRotation = transform.rotation;
+        _tempPos.y = -_tempPos.y;
+        _tempRotation.x = -_tempRotation.x;
+        transform.position = _tempPos;
+        transform.rotation = _tempRotation;
     }
 }
