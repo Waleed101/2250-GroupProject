@@ -18,6 +18,7 @@ public class ThirdPersonMovement : MonoBehaviour
     public Camera mainCam;
 
     // Update is called once per frame
+    
     private void Start()
     {
         Cursor.visible = false;
@@ -31,6 +32,10 @@ public class ThirdPersonMovement : MonoBehaviour
         
         float horizontal = Input.GetAxisRaw("Horizontal");
         float vertical = Input.GetAxisRaw("Vertical");
+        if (horizontal == 0 || vertical == 0)
+            GetComponent<Rigidbody>().constraints = RigidbodyConstraints.FreezeAll;
+        else
+            GetComponent<Rigidbody>().constraints = RigidbodyConstraints.None;
         Vector3 direction = new Vector3(horizontal, 0f, vertical).normalized;
         if(direction.magnitude < 0.1f)
             direction = new Vector3(horizontal, 0f, Input.GetAxisRaw("Run"));
@@ -85,7 +90,6 @@ public class ThirdPersonMovement : MonoBehaviour
         GameObject arrowGO = Instantiate(arrow, arrowSpawn.position, arrowSpawn.rotation);
         Rigidbody arrowRB = arrowGO.GetComponent<Rigidbody>();
         arrowRB.velocity = cam.transform.forward * shootForce;
-
-
     }
 }
+
