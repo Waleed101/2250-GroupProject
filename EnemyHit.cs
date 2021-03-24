@@ -1,4 +1,4 @@
-﻿using System.Collections;
+using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
@@ -6,31 +6,24 @@ public class EnemyHit : MonoBehaviour
 {
     public GameObject player;
     private Animator animator;
+    private const float arrowDamage = 10f, swordDamage = 50f;
 
     // Start is called before the first frame update
-    void Start()
-    {
-        animator = player.GetComponent<Animator>();
+    void Start() => animator = player.GetComponent<Animator>();
 
-    }
+    private void OnCollisionEnter(Collision other) => CheckAttackEnemy(other.collider);
+    private void OnTriggerEnter(Collider other) => CheckAttackEnemy(other);
 
-    // Update is called once per frame
-    void Update()
+    private void CheckAttackEnemy(Collider other)
     {
-
-    }
-
-    private void OnCollisionEnter(Collision collision)
-    {
-        if (collision.gameObject.tag == "Enemy" && (animator.GetBool("Hit") || animator.GetBool("Shoot")))
-        {
-            print("Enemy hit");
-        }
-    }
-    private void OnTriggerEnter(Collider other)
-    {
-        if (other.gameObject.tag == "Enemy" && (animator.GetBool("Hit") || animator.GetBool("Shoot"))) {
-            print("Enemy hit");
+        print("--------------------------------");
+        print(other.gameObject.tag);
+        print("Mouse: " + (animator.GetBool("Hit") || animator.GetBool("Shooting")));
+        print(player.GetComponent<AttackCooldown>().GetIfCanAttack());
+        if (other.gameObject.tag == "Enemy" && (animator.GetBool("Hit") || animator.GetBool("Shooting")) && player.GetComponent<AttackCooldown>().GetIfCanAttack()) {
+            player.GetComponent<AttackCooldown>().ResetAttack();
+            print("Attackin!");
+            other.gameObject.GetComponent<Enemy>().TakeDamage((this.gameObject.tag == "Sword") ? swordDamage : arrowDamage);
         }
     }
 }
