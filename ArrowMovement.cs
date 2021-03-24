@@ -1,4 +1,4 @@
-﻿using System.Collections;
+using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
@@ -20,6 +20,10 @@ public class ArrowMovement : MonoBehaviour
         if (!hitSomething)
         {
             transform.rotation = Quaternion.LookRotation(myBody.velocity);
+        }
+        if (transform.position.y < -50)
+        {
+            Destroy(gameObject);
         }
     }
 
