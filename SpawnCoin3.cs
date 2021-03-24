@@ -1,5 +1,6 @@
-﻿using UnityEngine;
+using UnityEngine;
 
+// Coin 3 is spawn 
 public class SpawnCoin3 : MonoBehaviour
 {
 
@@ -7,6 +8,7 @@ public class SpawnCoin3 : MonoBehaviour
 
     void Start()
     {
+        // Location in village where coin is placed
         Instantiate(Coin3, new Vector3(-33.29f, -8.324f, 72.325f), Quaternion.identity);
     }
 
