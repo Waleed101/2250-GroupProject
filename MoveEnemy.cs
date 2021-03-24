@@ -1,6 +1,8 @@
 using System.Collections.Generic;
 using UnityEngine;
 
+
+     // Movement script for enemy 
     public class MoveEnemy : MonoBehaviour
     {
         public float mouseRotateSpeed = 0.3f;
@@ -22,6 +24,7 @@ using UnityEngine;
             get; private set;
         }
 
+
         void Awake()
         {
             if (Instance != null)
@@ -31,12 +34,13 @@ using UnityEngine;
             Instance = this;
         }
 
+        
         void Start()
         {
             animator = GetComponent<Animator>();
             initRotation = transform.rotation;
 
-         
+         // Animations 
             animations = new List<string>()
             {
                 "Idle2",
@@ -44,6 +48,7 @@ using UnityEngine;
                 "Idle4",
                 "Hit1",
                 "Fall1",
+                // Attack anamations 
                 "Attack1h1",
                 "Attack1h2",
                 "Attack1h3",
@@ -59,6 +64,7 @@ using UnityEngine;
         void Update()
         {
 
+            // If button goes down this movement 
             if (Input.GetMouseButtonDown(1))
             {
                 startMouseRotate = true;
@@ -74,13 +80,14 @@ using UnityEngine;
                 prevMousePosition = Input.mousePosition;
             }
 
+            // Horizontal and vertical movement 
             float h = Input.GetAxis("Horizontal");
             float v = Input.GetAxis("Vertical");
 
             if (Mathf.Abs(h) > 0.001f)
                 v = 0;
 
-
+            // If mouse is rotated
             if (!startMouseRotate)
             {
                 if (h > 0.5f)
@@ -105,6 +112,7 @@ using UnityEngine;
             animator.SetFloat("speedv", speed);
         }
 
+        // Enemy goes onto next animation
         public void OnNextAnimation()
         {
             currentAnimation++;
@@ -119,6 +127,7 @@ using UnityEngine;
             animator.SetTrigger(animations[currentAnimation]);
         }
 
+         // Enemy goes to previous animation
         public void OnPrevAnimation()
         {
             currentAnimation--;
