@@ -1,4 +1,4 @@
-﻿using System.Collections;
+using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
@@ -11,6 +11,8 @@ public class ThirdPersonMovement : MonoBehaviour
     private float _turnSmoothVelocity;
     private Animator _anim;
     public GameObject arrow;
+    public GameObject swordHand;
+    public GameObject bowHand;
     public Transform arrowSpawn;
     public float shootForce = 20f;
     public Camera mainCam;
@@ -26,7 +28,6 @@ public class ThirdPersonMovement : MonoBehaviour
     {
 
         _anim.SetBool("Greeting", Input.GetKey(KeyCode.G));
-        _anim.SetBool("Hit", Input.GetMouseButton(0));
         
         float horizontal = Input.GetAxisRaw("Horizontal");
         float vertical = Input.GetAxisRaw("Vertical");
@@ -65,14 +66,16 @@ public class ThirdPersonMovement : MonoBehaviour
             _anim.SetFloat("Running", 0f);
             _anim.SetFloat("Walking", 0f);
         }
-        _anim.SetBool("Shooting", Input.GetKey(KeyCode.F));
-        if (Input.GetKey(KeyCode.F))
+
+        _anim.SetBool("Shooting", Input.GetMouseButton(0) && bowHand.activeSelf);
+        _anim.SetBool("Hit", Input.GetMouseButton(0) && swordHand.activeSelf);
+        if (Input.GetMouseButton(0) && (bowHand.activeSelf || swordHand.activeSelf))
         {
             float targetAngle = Mathf.Atan2(direction.x, direction.z) * Mathf.Rad2Deg + cam.eulerAngles.y;
             //float targetAngle = Mathf.Atan2(direction.x, direction.z) * Mathf.Rad2Deg ;
 
             float angle = Mathf.SmoothDampAngle(transform.eulerAngles.y, targetAngle, ref _turnSmoothVelocity, turnSmoothTime);
-            _anim.SetBool("Shooting", true);
+
             transform.rotation = Quaternion.Euler(0f, angle, 0f);
         }
     }
