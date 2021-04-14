@@ -12,9 +12,9 @@ public class ThirdPersonMovement : MonoBehaviour
     [SerializeField] private CharacterInfo _characterRef;
 
     // Reference to speed and movmeent
-    public float _speed;
+    private float _speed;
     public float turnSmoothTime = 0.1f;
-    public float _speedToChange;
+    private float _speedToChange;
     private float _turnSmoothVelocity;
     private Animator _anim;
 
