@@ -10,6 +10,7 @@ public class DialogueManager : MonoBehaviour
     public GameObject dialogueCanvas;
     public TextMeshProUGUI nameText;
     public TextMeshProUGUI dialogueText;
+    public bool tutorialTrigger;
 
     // A queue that stores sentences to be displayed in the dialogue box
     private Queue<string> _sentences;
@@ -19,17 +20,15 @@ public class DialogueManager : MonoBehaviour
     {
         // At the start of game, the dialogue box is hidden
         dialogueCanvas.SetActive(false);
-        _sentences = new Queue<string>();
     }
 
     // This method is called whenever the player becomes near an NPC to trigger a dialogue
-   public void StartDialogue(Dialogue dialogue)
+   public void StartDialogue(Dialogue dialogue, bool task)
     {
         // UI is initiated
         dialogueCanvas.SetActive(true);
         nameText.text = dialogue.name;
-
-        _sentences.Clear();
+        _sentences = new Queue<string>();
 
         // Engueues the dialogue of the NPC that the player is in near proximity of
         foreach (string sentence in dialogue.sentences)
@@ -38,16 +37,18 @@ public class DialogueManager : MonoBehaviour
         }
 
         // Calls for the first sentence to be displayed
-        DisplayNextSentence();
+        DisplayNextSentence(task);
     }
 
     // This method displays sentences one-by-one in the dialogue box
-    public void DisplayNextSentence()
+    public void DisplayNextSentence(bool task)
     {
         // If there are no more sentnences left in the queue, the dialogue is terminated
         if (_sentences.Count == 0)
         {
             EndDialogue();
+            if(task)
+                GameObject.FindGameObjectWithTag("GameController").GetComponent<DayLevelManager>().TaskCompleted();
             return;
         }
 
@@ -71,5 +72,6 @@ public class DialogueManager : MonoBehaviour
     public void EndDialogue()
     {
         dialogueCanvas.SetActive(false);
+        tutorialTrigger = true;
     }
 }

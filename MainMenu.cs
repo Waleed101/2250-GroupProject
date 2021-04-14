@@ -1,7 +1,9 @@
-using System.Collections;//Libraries
+﻿using System.Collections;//Libraries
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.SceneManagement;
+
+// Main menu script 
 public class MainMenu : MonoBehaviour//script to create the functionalities of the Menu Scene
 {
   public void PlayGame (){

@@ -2,18 +2,15 @@
 using System.Collections.Generic;
 using UnityEngine;
 
+// Rotates coins
 public class CoinRotator : MonoBehaviour
+
 {
-
-    public int rotateSpeed;
-
-     void Start()
-    {
-        rotateSpeed = 2;
-    }
-
+    
+    // Update is called once per frame
     void Update()
     {
-        transform.Rotate(new Vector3(0, rotateSpeed, 0));
+        // Coin is rotated 
+        transform.Rotate(0,3,0);
     }
 }

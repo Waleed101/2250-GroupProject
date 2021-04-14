@@ -1,4 +1,5 @@
-﻿using System.Collections;
+﻿using Cinemachine.Editor;
+using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
@@ -9,9 +10,13 @@ public class EnemyStealer : Enemy
     public float startHealth = 50f;
     private Transform _currentTarget;
     public Transform spawnLocation;
+    public int scoreInc = 0;
+
+    private bool _alreadyStole = false;
 
     public override void Start()
     {
+        base.SetAsRunner();
         // Get current spawn location
         spawnLocation = GameObject.FindGameObjectWithTag("Enemy Spawn").transform;
         
@@ -19,6 +24,7 @@ public class EnemyStealer : Enemy
         base.Start();
         base.SetMaxHealth(startHealth);
         base.SetCurrentHealth(startHealth);
+
 
         // Current movement target is the player
         _currentTarget = player.transform;
@@ -30,7 +36,7 @@ public class EnemyStealer : Enemy
         // Identical to the parent, just moves slightly faster
         Vector3 playerPos = _currentTarget.position;
         playerPos.x += xDir; playerPos.z += zDir;
-        Vector3 pos = Vector3.MoveTowards(transform.position, playerPos, movementSpeed * Time.deltaTime * 1.5f);
+        Vector3 pos = Vector3.MoveTowards(transform.position, playerPos, movementSpeed * Time.deltaTime * 1.5f * base.GetSpeedMultiplier());
         Vector3 diff = base.Absolute(transform.position) - base.Absolute(pos);
         diff.y = Terrain.activeTerrain.SampleHeight(transform.position) + Terrain.activeTerrain.GetPosition().y + 0.05f;
         transform.position = pos;
@@ -51,10 +57,12 @@ public class EnemyStealer : Enemy
     public override void AffectPlayer()
     {
         // Check to see if they've taken time since their last kill
-        if ((Time.time - timeSinceLast) > timeToNextKill)
+        if ((Time.time - timeSinceLast) > timeToNextKill && base.GetIfEnteredZone() && !_alreadyStole && (FindObjectOfType<ScoreCounter>().GetCurrentScore() + scoreInc) >= 0)
         {
-            // Nothing here now because they don't collect coins until level 2
-            print("No coins to steal!!!");
+            _alreadyStole = true;
+            base.StoleCoin();
+            FindObjectOfType<ScoreCounter>().incrementScore(scoreInc);
+            timeSinceLast = Time.time;
         }
     }
 }

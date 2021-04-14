@@ -21,11 +21,13 @@ public class SpawnEnemy : MonoBehaviour
 
     // Keeping track of the last spawn, keep track of spawn enabled
     private float _lastSpawn = 0f;
-    private bool _spawnEnabled = false;
+    public static bool _spawnEnabled = false;
+
+    private float _speedMultiplier = 1f, _strengthMultiplier = 1f;
 
     void Start()
     {
-        // Put correct message on display
+            // Put correct message on display
         enemyCounter.GetComponent<TextMeshProUGUI>().text = "Enemies: " + _enemiesKilled + "/" + targetEnemies;
     }
 
@@ -36,8 +38,16 @@ public class SpawnEnemy : MonoBehaviour
         {
             // Reset clock
             _lastSpawn = Time.time;
+            int type = Random.Range(0, _enemyArr.Length);
             // Spawn random enemy
-            GameObject temp = Instantiate(_enemyArr[Random.Range(0, _enemyArr.Length)]);
+            GameObject temp = Instantiate(_enemyArr[type]);
+            if(type == 0) {
+                temp.GetComponent<Enemy>().SetSpeedMultiplier(_speedMultiplier);
+                temp.GetComponent<Enemy>().SetStrengthMultiplier(_strengthMultiplier);
+            } else {
+                temp.GetComponent<EnemyStealer>().SetSpeedMultiplier(_speedMultiplier);
+                temp.GetComponent<EnemyStealer>().SetStrengthMultiplier(_strengthMultiplier);
+            }
             // Set proper size, position, point towards Xavier
             temp.transform.localScale = new Vector3(0.25f, 0.25f, 0.25f);
             temp.transform.position = _enemySpawnPoint.position;
@@ -49,19 +59,29 @@ public class SpawnEnemy : MonoBehaviour
     public void EnemyKilled() { 
         // Increment enemies killed; display on screen
         _enemiesKilled++;
-        enemyCounter.GetComponent<TextMeshProUGUI>().text = "Enemies: " + _enemiesKilled + "/" + targetEnemies;
+        UpdateCounter();
         // If target enemies reached
         if(_enemiesKilled == targetEnemies)
         {
-            // Disable spawn, delete all the active enemies, and turn on the congrats screen
-            DisableSpawn();
             foreach (GameObject enemy in GameObject.FindGameObjectsWithTag("Enemy"))
                 Destroy(enemy);
-            congratsScreen.SetActive(true);
+            this.GetComponent<ManageLevels>().NextLevel();
+            print("Done Level!");
         }
     }
 
+    public void UpdateCounter() => enemyCounter.GetComponent<TextMeshProUGUI>().text = "Enemies: " + _enemiesKilled + "/" + targetEnemies;
+
     // Enable/Disble spawn methods
-    public void EnableSpawn() { _spawnEnabled = true; }
+    public void EnableSpawn(float spawnRate, int toKill)
+    {
+        _enemiesKilled = 0;
+        enemyCounter.GetComponent<TextMeshProUGUI>().text = "Enemies: " + _enemiesKilled + "/" + targetEnemies;
+        _spawnEnabled = true;
+        _enemySpawnRate = spawnRate;
+        targetEnemies = toKill;
+    }
     public void DisableSpawn() { _spawnEnabled = false; }
+    public void SetStrength(float strength) { _strengthMultiplier = strength; }
+    public void SetSpeed(float speed) { _speedMultiplier = speed; }
 }

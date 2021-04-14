@@ -1,4 +1,4 @@
-using System.Collections;//Libraries
+﻿using System.Collections;//Libraries
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.SceneManagement;
@@ -6,22 +6,22 @@ using UnityEngine.SceneManagement;
 public class CharacterSelection : MonoBehaviour //Iterate through different character and then choose a character
 {
     private GameObject[] _characterList; //Declare game object array
-    [SerializeField] private CharacterInfo _characterRef;//private class CharacterInfo 
-    private int _index;//Declare the index variable of the array to allow iteration through the array
+    [SerializeField] private CharacterInfo _characterRef; //private class CharacterInfo 
+    private int _index; //Declare the index variable of the array to allow iteration through the array
     
 
     private void Start()
     {
-        _index = PlayerPrefs.GetInt("CharacterSelected");//index is initialized to the selected character in the character list
-        _characterList = new GameObject[transform.childCount];//creates an array of the amount of childern
+        _index = PlayerPrefs.GetInt("CharacterSelected"); //index is initialized to the selected character in the character list
+        _characterList = new GameObject[transform.childCount]; //creates an array of the amount of childern
         
-        for (int i = 0; i < transform.childCount; i++)//for each child object in the empty game object
+        for (int i = 0; i < transform.childCount; i++) //for each child object in the empty game object
         {
-            _characterList[i] = transform.GetChild(i).gameObject;//fill the array
+            _characterList[i] = transform.GetChild(i).gameObject; //fill the array
         }
             foreach (GameObject go in _characterList)
             {
-                go.SetActive(false);// The characters besides the first in the array are set to false 
+                go.SetActive(false); // The characters besides the first in the array are set to false 
                 
 
         }
@@ -65,7 +65,7 @@ public class CharacterSelection : MonoBehaviour //Iterate through different char
         _characterList[_index].SetActive(false);
 
         _index++;
-        if (_index == _characterList.Length)//loop back to the min value once the max value is passed on the right
+        if (_index == _characterList.Length) //loop back to the min value once the max value is passed on the right
         {
             _index = 0;
             
@@ -83,12 +83,12 @@ public class CharacterSelection : MonoBehaviour //Iterate through different char
     public void ChangeScene() //on click of the confirm button the main scene will be initiated
     {
         
-        if (_index == 0)//if the character index is 0 then the character loaded will be the hero
+        if (_index == 0) //if the character index is 0 then the character loaded will be the hero
             _characterRef.SetHero();
-        else//if the character index is anything other than 0 then the character loaded will be the bandit
+        else //if the character index is anything other than 0 then the character loaded will be the bandit
             _characterRef.SetBandit();
-        PlayerPrefs.SetInt("CharacterSelected", _index);//sets the player that is selected
-        SceneManager.LoadScene("Main");//loads the next scene
+        PlayerPrefs.SetInt("CharacterSelected", _index); //sets the player that is selected
+        SceneManager.LoadScene("Main"); //loads the next scene
     }
        
     

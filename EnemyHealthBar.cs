@@ -6,57 +6,37 @@ using UnityEngine.UI;
 public class EnemyHealthBar : MonoBehaviour
 {
 
-	public Slider slider;
-	public Gradient gradient;
-	public Image fill;
+    // Slider so health goes down when damage is taken
+    public Slider slider;
 
-	public int maxSpeed = 100;
-	public int currentSpeed;
+    // Health bar changes color as health goes down
+    public Gradient gradient;
 
+    // Sets the fill of each health bar 
+    public Image fill;
 
-	// Start is called before the first frame update
-	void Start()
-	{
-		currentSpeed = maxSpeed;
-		SetMaxSpeed(maxSpeed);
-	}
+    // Method to set starting health of the health bar
+    public void SetStartingHealth(float health)
 
-	// Update is called once per frame
-	void Update()
-	{
-		if (Input.GetKeyDown(KeyCode.E))
-		{
-			TakeDamage(20);
-		}
-	}
+    {
+        // Sliders starting maximum health value
+        slider.maxValue = health;
 
+        //Sliders starting health value
+        slider.value = health;
 
-	public void SetMaxSpeed(int speed)
-	{
-		slider.maxValue = speed;
-		slider.value = speed;
-
-		fill.color = gradient.Evaluate(1f);
+        // References health bar gradient 
+        fill.color = gradient.Evaluate(1f);
+    }
 
 
-	}
+    // Method to set the current health of the health bar 
+    public void SetHealth(float health)
+    {
+        // Sliders current health value
+        slider.value = health; 
 
-	public void SetSpeed(int speed)
-	{
-		slider.value = speed;
-
-		fill.color = gradient.Evaluate(slider.normalizedValue);
-
-
-	}
-
-	void TakeDamage(int damage)
-	{
-		currentSpeed -= damage;
-
-		SetSpeed(currentSpeed);
-	}
+        // Health bars color
+        fill.color = gradient.Evaluate(slider.normalizedValue);
+    }
 }
-
-
-
