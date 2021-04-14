@@ -10,7 +10,7 @@ public class HealthManager : MonoBehaviour
     public GameObject DeathCanvas , QuickReviveUsed;
 
     // Keep track of current health and starting health
-    public float _currentHealth, _startingHealth;
+    private float _currentHealth, _startingHealth;
     public bool quickRevive;
 
     private Animator _anim;
